@@ -6,3 +6,6 @@ Authorship Analysis using Python
 python3 -m pip install -r requirements.txt
 python3 main.py
 ```
+
+## For muizu
+. env/bin/activate
