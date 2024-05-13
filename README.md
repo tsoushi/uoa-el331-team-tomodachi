@@ -3,6 +3,6 @@ Authorship Analysis using Python
 
 ## 実行方法
 ```python
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 python3 main.py
 ```
