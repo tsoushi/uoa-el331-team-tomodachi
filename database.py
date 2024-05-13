@@ -6,7 +6,7 @@ def get_con() -> sqlite3.Connection:
 
 def create_table():
     con = get_con()
-    con.execute('CREATE TABLE IF NOT EXISTS txt_file (filename TEXT, content TEXT)')
+    con.execute('CREATE TABLE IF NOT EXISTS txt_file (filename TEXT PRIMARY KEY, content TEXT)')
     con.commit()
     con.close()
 
