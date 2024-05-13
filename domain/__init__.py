@@ -1,1 +1,1 @@
-from .txt_file import TXTFile
+from .text_file import TextFile

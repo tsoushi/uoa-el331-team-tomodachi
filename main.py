@@ -15,7 +15,7 @@ def create():
     file_name = data['fileName']
     content = data['content']
     # create file (sqlite)
-    database.create_txt_file(domain.TXTFile(file_name, content))
+    database.create_txt_file(domain.TextFile(file_name, content))
     return 'File created'
 
 

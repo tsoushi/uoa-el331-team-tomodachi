@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class TXTFile:
+class TextFile:
     filename: str
     content: str
     
