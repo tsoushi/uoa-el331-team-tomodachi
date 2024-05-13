@@ -1,19 +1,12 @@
 import flask
 from flask import request
-import sqlite3
 
-from repository import Repository
-from usecase import Usecase
-
-con = sqlite3.connect('database.db')
-repo = Repository(con)
-usecase = Usecase(repo)
+import database
+import domain
+database.create_table() # データベース初期化
 
 app = flask.Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello, World!'
 
 @app.route('/file/create', methods=['POST'])
 def create():
@@ -22,7 +15,7 @@ def create():
     file_name = data['fileName']
     content = data['content']
     # create file (sqlite)
-    usecase.txt_file.create(file_name, content)
+    database.create_txt_file(domain.TXTFile(file_name, content))
     return 'File created'
 
 
