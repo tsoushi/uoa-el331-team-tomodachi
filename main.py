@@ -3,7 +3,6 @@ from flask import request, jsonify
 
 import database
 import domain
-import api_response
 database.create_table() # データベース初期化
 
 app = flask.Flask(__name__)
