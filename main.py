@@ -74,6 +74,18 @@ def exploratory_search():
         'result': result.to_dict()
     })
 
+@app.route('/compare-q-vs-k', methods=['POST'])
+def compare_q_vs_k():
+    data = request.get_json()
+    q_text_file_id = data['qTextFileID']
+    k_text_file_id = data['kTextFileID']
+
+    result = usecase.comparison.compare_q_vs_k(q_text_file_id, k_text_file_id)
+    return jsonify({
+        'message': 'success',
+        'result': result.to_dict()
+    })
+
 if __name__ == '__main__':
 
     app.run(host='0.0.0.0', port=8080)
