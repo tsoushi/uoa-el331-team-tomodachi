@@ -78,9 +78,9 @@ def exploratory_search():
 def compare_q_vs_k():
     data = request.get_json()
     q_text_file_id = data['qTextFileID']
-    k_text_file_id = data['kTextFileID']
+    k_text_file_ids = data['kTextFileIDs']
 
-    result = usecase.comparison.compare_q_vs_k(q_text_file_id, k_text_file_id)
+    result = usecase.comparison.compare_q_vs_k(q_text_file_id, k_text_file_ids)
     return jsonify({
         'message': 'success',
         'result': result.to_dict()
