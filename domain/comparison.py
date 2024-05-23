@@ -5,6 +5,7 @@ import datetime
 import uuid
 
 import spacy
+import spacy.tokens
 
 from .text_file import TextFile
 
@@ -12,20 +13,18 @@ nlp = spacy.load('en_core_web_sm')
 
 @dataclass
 class WordRank:
-    rank: int # 1~
     word: str
     count: int
 
     def to_dict(self):
         return {
-            'rank': self.rank,
             'word': self.word,
             'count': self.count
         }
 
 @dataclass
 class CompareQvsKsTerm:
-    offset: int # 1, 21, 41, ...
+    offset: int # 0, 20, 40, ...
     words: List[WordRank]
 
     def to_dict(self):
@@ -77,26 +76,64 @@ def new_compare_q_vs_ks_result(q_text_file: TextFile) -> CompareQvsKsResult:
         updated_at=datetime.datetime.now()
     )
 
+def make_word_count_dict(doc: spacy.tokens.Doc):
+    word_count_dict: dict[str, int] = {}
+    for token in doc:
+        if token.is_alpha:
+            word = token.text.lower()
+            if word in word_count_dict:
+                word_count_dict[word] += 1
+            else:
+                word_count_dict[word] = 1
+    return word_count_dict
 
 def compare_q_vs_k(q_text_file: TextFile, k_text_files: List[TextFile]) -> CompareQvsKsResult:
     result = new_compare_q_vs_ks_result(q_text_file)
 
-    result.terms = [
-        CompareQvsKsTerm(
-            offset=1,
-            words=[
-                WordRank(rank=1, word='word1', count=100),
-                WordRank(rank=2, word='word2', count=97),
-                WordRank(rank=3, word='word3', count=89),
-                # ... 4 ~ 19 ...
-                WordRank(rank=20, word='word20', count=1)
-            ]
-        ),
-        # offset 21, 41, ...
-    ]
+    q_word_count = make_word_count_dict(nlp(q_text_file.content))
+    q_word_count_list = sorted(q_word_count.items(), key=lambda x: x[1], reverse=True)
+
+    q_word_ranks = []
+    for i, (word, count) in enumerate(q_word_count_list):
+        q_word_ranks.append(
+            WordRank(
+                word=word,
+                count=count
+            )
+        )
+    
+    # 全単語の出現回数を20単語ずつに分割
+    for i in range(0, len(q_word_ranks), 20):
+        result.terms.append(
+            CompareQvsKsTerm(
+                offset=i,
+                words=q_word_ranks[i:i + 20]
+            )
+        )
 
     for k_text_file in k_text_files:
         terms = []
+        k_word_count_dict = make_word_count_dict(nlp(k_text_file.content))
+        for i in range(0, len(q_word_ranks), 20):
+            words = []
+            for j in range(i, i + 20):
+                if j >= len(q_word_ranks):
+                    break
+                word = q_word_ranks[j].word
+                if word in k_word_count_dict:
+                    words.append(
+                        WordRank(
+                            word=word,
+                            count=k_word_count_dict[word]
+                        )
+                    )
+            words = sorted(words, key=lambda x: x.count, reverse=True)
+            terms.append(
+                CompareQvsKsTerm(
+                    offset=i,
+                    words=words
+                )
+            )
         result.k_text_files.append(
             CompareQvsKsKTextFile(
                 k_text_file_id=k_text_file.id,
