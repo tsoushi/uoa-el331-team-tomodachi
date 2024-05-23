@@ -86,6 +86,18 @@ def compare_q_vs_k():
         'result': result.to_dict()
     })
 
+@app.route('/consistency-k-vs-k', methods=['POST'])
+def consistency_k_vs_k():
+    data = request.get_json()
+    text_file_ids = data['textFileIDs']
+    limit = data['limit']
+
+    result = usecase.consistency.consistency_k_vs_k(text_file_ids, limit)
+    return jsonify({
+        'message': 'success',
+        'result': result.to_dict()
+    })
+
 if __name__ == '__main__':
 
     app.run(host='0.0.0.0', port=8080)
