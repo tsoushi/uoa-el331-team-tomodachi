@@ -54,6 +54,8 @@ class CompareQvsKsResult:
     q_text_file_name: str
     terms: List[CompareQvsKsTerm]
     k_text_files: List[CompareQvsKsKTextFile]
+    created_at: datetime.datetime = datetime.datetime.now()
+    updated_at: datetime.datetime = datetime.datetime.now()
 
     def to_dict(self):
         return {
@@ -70,7 +72,9 @@ def new_compare_q_vs_ks_result(q_text_file: TextFile) -> CompareQvsKsResult:
         q_text_file_id=q_text_file.id,
         q_text_file_name=q_text_file.name,
         terms=[],
-        k_text_files=[]
+        k_text_files=[],
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now()
     )
 
 
