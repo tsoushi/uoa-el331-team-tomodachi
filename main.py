@@ -1,80 +1,89 @@
+import os
+import sys
 import flask
 from flask import request, jsonify
 
+sys.path.append(os.path.dirname(__file__))
+
 import database
-import domain
+import usecase
 database.create_table() # データベース初期化
 
 app = flask.Flask(__name__)
 
+# TODO: 各エンドポイントの引数のエラーハンドリング
 
 @app.route('/text-file', methods=['POST'])
 def create_text_file():
     data = request.get_json()
-    file_name = data['fileName']
+    name = data['name']
     content = data['content']
 
-    text_file = database.create_txt_file(domain.TextFile(file_name, content))
+    text_file = usecase.text_file.create(name, content)
     return jsonify({
         'message': 'success',
-        'textFile': {
-            'filename': text_file.filename,
-            'content': text_file.content
-        }
+        'textFile': text_file.to_dict()
     })
 
-@app.route('/text-file', methods=['GET'])
-def get_text_file():
-    data = request.get_json()
-    file_name = data['fileName']
-
-    text_file = database.get_txt_file(file_name)
+@app.route('/text-file/<text_file_id>', methods=['GET'])
+def get_text_file(text_file_id):
+    text_file = usecase.text_file.get(text_file_id) # TODO: TextFileが存在しない場合のエラーハンドリング
     return jsonify({
         'message': 'success',
-        'textFile': {
-            'filename': text_file.filename,
-            'content': text_file.content
-        }
+        'textFile': text_file.to_dict()
     })
 
-@app.route('/text-file', methods=['PUT'])
-def update_text_file():
+@app.route('/text-file/<text_file_id>', methods=['PUT'])
+def update_text_file(text_file_id):
     data = request.get_json()
-    file_name = data['fileName']
+    name = data['name']
     content = data['content']
 
-    text_file = database.update_txt_file(domain.TextFile(file_name, content))
+    text_file = usecase.text_file.update(text_file_id, name, content) # TODO: TextFileが存在しない場合のエラーハンドリング
+
     return jsonify({
         'message': 'success',
-        'textFile': {
-            'filename': text_file.filename,
-            'content': text_file.content
-        }
+        'textFile': text_file.to_dict()
     })
 
-@app.route('/text-file', methods=['DELETE'])
-def delete_text_file():
-    data = request.get_json()
-    file_name = data['fileName']
-
-    text_file = database.delete_txt_file(file_name)
+@app.route('/text-file/<text_file_id>', methods=['DELETE'])
+def delete_text_file(text_file_id):
+    text_file_id = usecase.text_file.delete(text_file_id) # TODO: 存在しないTextFileを削除しようとした場合のエラーハンドリング
     return jsonify({
         'message': 'success',
-        'textFile': {
-            'filename': text_file.filename,
-            'content': text_file.content
-        }
+        'textFileID': text_file_id
     })
 
 @app.route('/text-file/all', methods=['GET'])
 def get_all_text_files():
-    text_files = database.get_all_txt_files()
+    text_files = usecase.text_file.get_all()
     return jsonify({
         'message': 'success',
-        'textFiles': [{
-            'filename': text_file.filename,
-            'content': text_file.content
-        } for text_file in text_files]
+        'textFiles': [text_file.to_dict() for text_file in text_files]
+    })
+
+@app.route('/exploratory-search', methods=['POST'])
+def exploratory_search():
+    data = request.get_json()
+    text_file_ids = data['textFileIDs']
+    word = data['word']
+
+    result = usecase.exploratory_search.search_by_word(text_file_ids, word)
+    return jsonify({
+        'message': 'success',
+        'result': result.to_dict()
+    })
+
+@app.route('/compare-q-vs-k', methods=['POST'])
+def compare_q_vs_k():
+    data = request.get_json()
+    q_text_file_id = data['qTextFileID']
+    k_text_file_id = data['kTextFileID']
+
+    result = usecase.comparison.compare_q_vs_k(q_text_file_id, k_text_file_id)
+    return jsonify({
+        'message': 'success',
+        'result': result.to_dict()
     })
 
 if __name__ == '__main__':
