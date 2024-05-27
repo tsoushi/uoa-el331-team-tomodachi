@@ -1,10 +1,29 @@
-import './App.css'
+import React, { useState } from 'react';
+import SearchBar from './SearchBar';
+import SearchResults from './SearchResults';
+import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
+  const [results, setResults] = useState<{ id: number, text: string }[]>([]);
+
+  const handleSearch = (searchQuery: string) => {
+    setQuery(searchQuery);
+
+    const fakeResults = [
+      { id: 1, text: 'Result 1 for ' + searchQuery },
+      { id: 2, text: 'Result 2 for ' + searchQuery },
+    ];
+    setResults(fakeResults);
+  };
 
   return (
-    <h1>AuthorShip analysis aizu</h1>
-  )
+    <div className="App">
+      <h1>Corpus Search</h1>
+      <SearchBar onSearch={handleSearch} />
+      <SearchResults results={results} />
+    </div>
+  );
 }
 
-export default App
+export default App;
