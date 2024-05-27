@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 import { FileManager } from './FileManager'
+import ExploratorySearch from './exploratorySearch/ExploratorySearch'
 
 const MenuBox = styled.ul`
   display: flex;
@@ -51,7 +52,7 @@ function App() {
         padding: 10px;
       `}>
         {scene === 'FileManager' && <FileManager />}
-        {scene === 'ExploratorySearch' && <h1>Exploratory Search</h1>}
+        {scene === 'ExploratorySearch' && <ExploratorySearch />}
         {scene === 'CompareQvsK' && <h1>Compare Q vs K</h1>}
         {scene === 'ConsistencyKvsK' && <h1>Consistency K vs K</h1>}
       </div>
@@ -59,4 +60,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
