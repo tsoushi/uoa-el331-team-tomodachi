@@ -63,8 +63,8 @@ def exploratory_search_by_word(text_files: List[TextFile], word: str) -> Explora
         for i, token in enumerate(doc):
           w = token.text
           if w == word:
-              get_left_words=[item.text for item in doc[max(0, i - 20):i] if item.is_alpha == False]
-              get_right_words=[item.text for item in doc[i + 1:min(len(doc), i + 21)] if item.is_alpha == False]
+              get_left_words=[item.text for item in doc[max(0, i - 20):i] if item.is_alpha == True]
+              get_right_words=[item.text for item in doc[i + 1:min(len(doc), i + 21)] if item.is_alpha == True]
               
 
               result.search_terms.append(
