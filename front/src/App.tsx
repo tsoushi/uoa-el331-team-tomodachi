@@ -44,6 +44,9 @@ function MenuBar({ setScene }: { setScene: React.Dispatch<React.SetStateAction<S
 
 function App() {
   const [scene, setScene] = useState<SceneName>('FileManager')
+  const [exploratorySearchFileIDs, setExploratorySearchFileIDs] = useState<string[]>([])
+  const [compareQvsKFileIDs, setCompareQvsKFileIDs] = useState<string[]>([])
+  const [consistencyKvsKFileIDs, setConsistencyKvsKFileIDs] = useState<string[]>([])
 
   return (
     <>
@@ -52,7 +55,7 @@ function App() {
         padding: 10px;
       `}>
         {scene === 'FileManager' && <FileManager />}
-        {scene === 'ExploratorySearch' && <ExploratorySearch />}
+        {scene === 'ExploratorySearch' && <ExploratorySearch textFileIDs={ exploratorySearchFileIDs } />}
         {scene === 'CompareQvsK' && <h1>Compare Q vs K</h1>}
         {scene === 'ConsistencyKvsK' && <h1>Consistency K vs K</h1>}
       </div>

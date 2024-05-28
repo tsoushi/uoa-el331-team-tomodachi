@@ -3,7 +3,8 @@ import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import './ExploratorySearch.css';
 
-const ExploratorySearch: React.FC = () => {
+const ExploratorySearch = ({textFileIDs}: { textFileIDs: string[] }) => {
+  // TODO: textFileIDsが変更されるたびにリクエストを送って、結果を表示する
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<{ id: number, text: string }[]>([]);
 
