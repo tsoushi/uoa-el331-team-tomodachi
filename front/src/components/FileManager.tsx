@@ -126,6 +126,7 @@ export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKQFileID
               type="checkbox"
               checked={file.checked}
               className="file-item-checkbox"
+              readOnly={true}
             />
             <strong>{file.name}</strong>
             <div className="file-item-content">
