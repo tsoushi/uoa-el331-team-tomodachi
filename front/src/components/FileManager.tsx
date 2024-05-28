@@ -17,7 +17,7 @@ export function FileManager() {
     const fetchFiles = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_APP_ORIGIN}/text-file/all`);
-        setFiles(response.data.textFiles);
+        setFiles(response.data.textFiles.map((file: any) => {file.checked = false; return file;}));
       } catch (error) {
         console.error('Error fetching files:', error);
       }
@@ -84,6 +84,27 @@ export function FileManager() {
         >
           Upload File
         </button>
+        <button
+          onClick={handleUploadFile}
+          disabled={!selectedFile}
+          className="search-button"
+        >
+          Search files
+        </button>
+        <button
+          onClick={handleUploadFile}
+          disabled={!selectedFile}
+          className="search-button"
+        >
+          Compare Q vs K
+        </button>
+        <button
+          onClick={handleUploadFile}
+          disabled={!selectedFile}
+          className="search-button"
+        >   
+        Consistency K vs K
+        </button>
       </div>
       <ul className="file-list">
         {files.map((file) => (
@@ -99,7 +120,7 @@ export function FileManager() {
             />
             <strong>{file.name}</strong>
             <div className="file-item-content">
-              <p>{file.content}</p>
+              <p>{file.content.substring(0, 100)}</p>
             </div>
             <button
               onClick={() => handleDeleteFile(file.id)}
