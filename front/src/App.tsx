@@ -59,6 +59,7 @@ function App() {
       `}>
         {scene === 'FileManager' && 
           <FileManager 
+            setScene={ setScene }
             setExploratorySearchFileIDs={ setExploratorySearchFileIDs }
             setCompareQvsKQFileID={ setCompareQvsKQFileID }
             setCompareQvsKKFileIDs={ setCompareQvsKKFileIDs }
