@@ -10,15 +10,3 @@ npm i axios
 ```
 npm run dev
 ```
-
-    const handleChecked = (id: number, checked: boolean) => { //検索などに使いたいファイルを選択する // データベースサーバー側との接続はいらないはず
-        const newFiles = files.map((file) => {
-            if(file.id == id) {
-                file.checked = !checked
-            }
-
-            return file;
-        });
-
-        setFiles(newFiles)
-    }

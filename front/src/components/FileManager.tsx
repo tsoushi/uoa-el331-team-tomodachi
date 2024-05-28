@@ -13,6 +13,7 @@ export function FileManager() {
   const [files, setFiles] = useState<TextFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -122,6 +123,18 @@ export function FileManager() {
             <div className="file-item-content">
               <p>{file.content.substring(0, 100)}</p>
             </div>
+            <button
+              onClick={() => handleDeleteFile(file.id)}
+              className="delete-button"
+            >
+              Detail
+            </button>
+            <button
+              onClick={() => handleDeleteFile(file.id)}
+              className="delete-button"
+            >
+              Rename
+            </button>
             <button
               onClick={() => handleDeleteFile(file.id)}
               className="delete-button"
