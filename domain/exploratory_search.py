@@ -4,7 +4,11 @@ from typing import List
 import datetime
 import uuid
 
+import spacy
+
 from .text_file import TextFile
+
+nlp = spacy.load('en_core_web_sm')
 
 @dataclass
 class ExploratorySearchTerm:
@@ -48,18 +52,28 @@ def new_exploratory_search_result(target_word: str) -> ExploratorySearchResult:
 
 
 def exploratory_search_by_word(text_files: List[TextFile], word: str) -> ExploratorySearchResult:
-    result = new_exploratory_search_result(word)
+    result=new_exploratory_search_result(word)
     # TODO: 各TextFileに対して検索を行う
     # 結果はそれぞれsearch_termsにappendしていく
     for text_file in text_files:
         # TODO: 検索結果それぞれに対して左右の単語を取得し、left_words, right_wordsに格納する
-        result.search_terms.append(
-            ExploratorySearchTerm(
-                text_file_id=text_file.id,
-                text_name=text_file.name,
-                left_words=[],
-                right_words=[]
-            )
+        doc=nlp(text_file.content)
+        get_left_words=[]
+        get_right_words=[]
+        for i, token in enumerate(doc):
+          w = token.text
+          if w == word:
+              get_left_words=[item.text for item in doc[max(0, i - 20):i] if item.is_alpha == True]
+              get_right_words=[item.text for item in doc[i + 1:min(len(doc), i + 21)] if item.is_alpha == True]
+              
+
+              result.search_terms.append(
+                ExploratorySearchTerm(
+                    text_file_id=text_file.id,
+                    text_name=text_file.name,
+                    left_words=get_left_words,
+                   right_words=get_right_words
+               )
         )
     
     return result
