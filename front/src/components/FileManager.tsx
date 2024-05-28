@@ -11,11 +11,12 @@ type TextFile = {
 
 type Props = {
   setExploratorySearchFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
-  setCompareQvsKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setCompareQvsKKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setCompareQvsKQFileID: React.Dispatch<React.SetStateAction<string>>;
   setConsistencyKvsKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKFileIDs, setConsistencyKvsKFileIDs }: Props) {
+export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKQFileID, setCompareQvsKKFileIDs, setConsistencyKvsKFileIDs }: Props) {
   const [files, setFiles] = useState<TextFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -98,7 +99,9 @@ export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKFileIDs
           Search files
         </button>
         <button
-          onClick={() => { setCompareQvsKFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString())); }}
+          onClick={() => {
+            // TODO: Qを選択する画面を表示する
+          }}
           disabled={!selectedFile}
           className="search-button"
         >
@@ -115,13 +118,13 @@ export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKFileIDs
       <ul className="file-list">
         {files.map((file) => (
           <li
+            onClick={() => handleChecked(file.id)}
             key={file.id}
             className="file-item"
           >
             <input
               type="checkbox"
               checked={file.checked}
-              onChange={() => handleChecked(file.id)}
               className="file-item-checkbox"
             />
             <strong>{file.name}</strong>
@@ -129,7 +132,10 @@ export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKFileIDs
               <p>{file.content.substring(0, 100)}</p>
             </div>
             <button
-              onClick={() => handleDeleteFile(file.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteFile(file.id)
+              }}
               className="delete-button"
             >
               Delete

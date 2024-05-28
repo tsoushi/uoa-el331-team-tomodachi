@@ -37,7 +37,9 @@
 }
 
 .file-item-checkbox {
-  margin-right: 16px;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 8px;
 }
 
 .file-item-content {
