@@ -19,6 +19,7 @@ export function FileManager() {
     return (
       <div>
         <h1>File Manager</h1>
+        <input type='file'></input>
         <FileList>
             <FileItem>file1.txt</FileItem>
             <FileItem>file2.txt</FileItem>
