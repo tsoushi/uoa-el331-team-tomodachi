@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-
-import { FileManager } from './FileManager'
+import { FileManager } from './components/FileManager'
 import ExploratorySearch from './exploratorySearch/ExploratorySearch'
 
 const MenuBox = styled.ul`

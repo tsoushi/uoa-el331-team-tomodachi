@@ -2,6 +2,7 @@ import os
 import sys
 import flask
 from flask import request, jsonify
+from flask_cors import CORS, cross_origin
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -10,6 +11,9 @@ import usecase
 database.create_table() # データベース初期化
 
 app = flask.Flask(__name__)
+
+# CORS
+CORS(app)
 
 # TODO: 各エンドポイントの引数のエラーハンドリング
 
