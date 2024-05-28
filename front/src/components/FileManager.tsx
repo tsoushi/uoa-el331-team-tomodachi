@@ -9,7 +9,13 @@ type TextFile = {
   checked: boolean;
 };
 
-export function FileManager() {
+type Props = {
+  setExploratorySearchFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setCompareQvsKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setConsistencyKvsKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export function FileManager({ setExploratorySearchFileIDs, setCompareQvsKFileIDs, setConsistencyKvsKFileIDs }: Props) {
   const [files, setFiles] = useState<TextFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -85,21 +91,21 @@ export function FileManager() {
           Upload File
         </button>
         <button
-          onClick={handleUploadFile}
+          onClick={() => { setExploratorySearchFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString())); }}
           disabled={!selectedFile}
           className="search-button"
         >
           Search files
         </button>
         <button
-          onClick={handleUploadFile}
+          onClick={() => { setCompareQvsKFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString())); }}
           disabled={!selectedFile}
           className="search-button"
         >
           Compare Q vs K
         </button>
         <button
-          onClick={handleUploadFile}
+          onClick={() => { setConsistencyKvsKFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString())); }}
           disabled={!selectedFile}
           className="search-button"
         >   

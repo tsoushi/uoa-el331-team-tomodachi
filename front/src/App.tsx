@@ -53,7 +53,11 @@ function App() {
       <div css={css`
         padding: 10px;
       `}>
-        {scene === 'FileManager' && <FileManager />}
+        {scene === 'FileManager' && 
+          <FileManager 
+            setExploratorySearchFileIDs={ setExploratorySearchFileIDs }
+            setCompareQvsKFileIDs={ setCompareQvsKFileIDs }
+            setConsistencyKvsKFileIDs={ setConsistencyKvsKFileIDs } />}
         {scene === 'ExploratorySearch' && <ExploratorySearch textFileIDs={ exploratorySearchFileIDs } />}
         {scene === 'CompareQvsK' && <h1>Compare Q vs K</h1>}
         {scene === 'ConsistencyKvsK' && <h1>Consistency K vs K</h1>}
