@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Input, List, ListItem, Heading, Checkbox } from '@chakra-ui/react';
 import axios from 'axios';
+import './FileManager.css';
 
 type TextFile = {
   id: number;
@@ -16,7 +16,7 @@ export function FileManager() {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get('/text-file/all');
+        const response = await axios.get(`${import.meta.env.VITE_APP_ORIGIN}/text-file/all`);
         setFiles(response.data.textFiles);
       } catch (error) {
         console.error('Error fetching files:', error);
@@ -38,7 +38,7 @@ export function FileManager() {
     reader.onload = async () => {
       const content = reader.result as string;
       try {
-        const response = await axios.post('/text-file', {
+        const response = await axios.post(`${import.meta.env.VITE_APP_ORIGIN}/text-file`, {
           name: selectedFile.name,
           content: content
         });
@@ -53,7 +53,7 @@ export function FileManager() {
 
   const handleDeleteFile = async (id: number): Promise<void> => {
     try {
-      await axios.delete(`/text-file/${id}`);
+      await axios.delete(`${import.meta.env.VITE_APP_ORIGIN}/text-file/${id}`);
       setFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
     } catch (error) {
       console.error('Error deleting file:', error);
@@ -69,44 +69,47 @@ export function FileManager() {
   };
 
   return (
-    <Box p={5}>
-      <Heading mb={4}>File Manager</Heading>
-      <Box mb={4}>
+    <div className="container">
+      <h1 className="heading">File Manager</h1>
+      <div className="input-container">
         <input
           type="file"
           onChange={handleFileChange}
-
+          className="file-input"
         />
-        <Button onClick={handleUploadFile} isDisabled={!selectedFile}>Upload File</Button>
-      </Box>
-      <List spacing={3}>
+        <button
+          onClick={handleUploadFile}
+          disabled={!selectedFile}
+          className="upload-button"
+        >
+          Upload File
+        </button>
+      </div>
+      <ul className="file-list">
         {files.map((file) => (
-          <ListItem
+          <li
             key={file.id}
-            p={2}
-            borderRadius="md"
-            borderWidth="1px"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            cursor="pointer"
-            _hover={{ backgroundColor: 'gray.100' }}
+            className="file-item"
           >
-            <Checkbox
-              isChecked={file.checked}
+            <input
+              type="checkbox"
+              checked={file.checked}
               onChange={() => handleChecked(file.id)}
-            >
-              <strong>{file.name}</strong>
-            </Checkbox>
-            <Box flex="1" ml={4}>
+              className="file-item-checkbox"
+            />
+            <strong>{file.name}</strong>
+            <div className="file-item-content">
               <p>{file.content}</p>
-            </Box>
-            <Button colorScheme="red" onClick={() => handleDeleteFile(file.id)}>
+            </div>
+            <button
+              onClick={() => handleDeleteFile(file.id)}
+              className="delete-button"
+            >
               Delete
-            </Button>
-          </ListItem>
+            </button>
+          </li>
         ))}
-      </List>
-    </Box>
+      </ul>
+    </div>
   );
 }
