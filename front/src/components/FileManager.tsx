@@ -3,13 +3,21 @@ import axios from 'axios';
 import './FileManager.css';
 
 type TextFile = {
-  id: number;
+  id: string;
   name: string;
   content: string;
   checked: boolean;
 };
 
-export function FileManager() {
+type Props = {
+  setScene: React.Dispatch<React.SetStateAction<'FileManager' | 'ExploratorySearch' | 'CompareQvsK' | 'ConsistencyKvsK'>>;
+  setExploratorySearchFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setCompareQvsKKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+  setCompareQvsKQFileID: React.Dispatch<React.SetStateAction<string>>;
+  setConsistencyKvsKFileIDs: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export function FileManager({ setScene, setExploratorySearchFileIDs, setCompareQvsKQFileID, setCompareQvsKKFileIDs, setConsistencyKvsKFileIDs }: Props) {
   const [files, setFiles] = useState<TextFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -52,7 +60,7 @@ export function FileManager() {
     reader.readAsText(selectedFile);
   };
 
-  const handleDeleteFile = async (id: number): Promise<void> => {
+  const handleDeleteFile = async (id: string): Promise<void> => {
     try {
       await axios.delete(`${import.meta.env.VITE_APP_ORIGIN}/text-file/${id}`);
       setFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
@@ -61,7 +69,7 @@ export function FileManager() {
     }
   };
 
-  const handleChecked = (id: number): void => {
+  const handleChecked = (id: string): void => {
     setFiles((prevFiles) =>
       prevFiles.map((file) =>
         file.id === id ? { ...file, checked: !file.checked } : file
@@ -86,22 +94,28 @@ export function FileManager() {
           Upload File
         </button>
         <button
-          onClick={handleUploadFile}
-          disabled={!selectedFile}
+          onClick={() => {
+            setExploratorySearchFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString()));
+            setScene('ExploratorySearch');
+          }}
           className="search-button"
         >
           Search files
         </button>
         <button
-          onClick={handleUploadFile}
-          disabled={!selectedFile}
+          onClick={() => {
+            // TODO: Qを選択する画面を表示する
+            setScene('CompareQvsK')
+          }}
           className="search-button"
         >
           Compare Q vs K
         </button>
         <button
-          onClick={handleUploadFile}
-          disabled={!selectedFile}
+          onClick={() => {
+            setConsistencyKvsKFileIDs(files.filter((file) => file.checked).map((file) => file.id.toString()))
+            setScene('ConsistencyKvsK')
+          }}
           className="search-button"
         >   
         Consistency K vs K
@@ -110,21 +124,25 @@ export function FileManager() {
       <ul className="file-list">
         {files.map((file) => (
           <li
+            onClick={() => handleChecked(file.id)}
             key={file.id}
             className="file-item"
           >
             <input
               type="checkbox"
               checked={file.checked}
-              onChange={() => handleChecked(file.id)}
               className="file-item-checkbox"
+              readOnly={true}
             />
             <strong>{file.name}</strong>
             <div className="file-item-content">
               <p>{file.content.substring(0, 100)}</p>
             </div>
             <button
-              onClick={() => handleDeleteFile(file.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteFile(file.id)
+              }}
               className="delete-button"
             >
               Detail

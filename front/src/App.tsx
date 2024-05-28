@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { CompareQvsK } from './components/CompareQvsK'
+import { ConsistencyKvsK } from './components/ConsistencyKvsK'
+
 import { FileManager } from './components/FileManager'
 import ExploratorySearch from './exploratorySearch/ExploratorySearch'
 
@@ -43,6 +46,10 @@ function MenuBar({ setScene }: { setScene: React.Dispatch<React.SetStateAction<S
 
 function App() {
   const [scene, setScene] = useState<SceneName>('FileManager')
+  const [exploratorySearchFileIDs, setExploratorySearchFileIDs] = useState<string[]>([])
+  const [compareQvsKKFileIDs, setCompareQvsKKFileIDs] = useState<string[]>([])
+  const [compareQvsKQFileID, setCompareQvsKQFileID] = useState<string>('')
+  const [consistencyKvsKFileIDs, setConsistencyKvsKFileIDs] = useState<string[]>([])
 
   return (
     <>
@@ -50,10 +57,16 @@ function App() {
       <div css={css`
         padding: 10px;
       `}>
-        {scene === 'FileManager' && <FileManager />}
-        {scene === 'ExploratorySearch' && <ExploratorySearch />}
-        {scene === 'CompareQvsK' && <h1>Compare Q vs K</h1>}
-        {scene === 'ConsistencyKvsK' && <h1>Consistency K vs K</h1>}
+        {scene === 'FileManager' && 
+          <FileManager 
+            setScene={ setScene }
+            setExploratorySearchFileIDs={ setExploratorySearchFileIDs }
+            setCompareQvsKQFileID={ setCompareQvsKQFileID }
+            setCompareQvsKKFileIDs={ setCompareQvsKKFileIDs }
+            setConsistencyKvsKFileIDs={ setConsistencyKvsKFileIDs } />}
+        {scene === 'ExploratorySearch' && <ExploratorySearch textFileIDs={ exploratorySearchFileIDs } />}
+        {scene === 'CompareQvsK' && <CompareQvsK qTextFileID={ compareQvsKQFileID } kTextFileIDs={ compareQvsKKFileIDs } />}
+        {scene === 'ConsistencyKvsK' && <ConsistencyKvsK textFileIDs={ consistencyKvsKFileIDs } />}
       </div>
     </>
   )
