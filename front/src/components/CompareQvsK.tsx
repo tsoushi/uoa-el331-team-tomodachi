@@ -65,7 +65,7 @@ const WordCount = styled.span`
 const Term = ({qFileName, kFileNames, qTerm, kTerms}: { qFileName: string, kFileNames: string[], qTerm: ResultTerm, kTerms: ResultTerm[] }) => {
     return (
         <BoxVertical>
-            <Offset>RANK: {qTerm.offset}</Offset>
+            <Offset>RANK: {qTerm.offset+1} ~</Offset>
             <BoxHorizontal>
                 <BoxItem>
                     <TermBox>
