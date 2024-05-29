@@ -12,13 +12,14 @@ type TextFile = {
 export function FileManager() {
   const [files, setFiles] = useState<TextFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [renamingFileId, setRenamingFileId] = useState<number | null>(null);
+  const [newFileName, setNewFileName] = useState<string>('');
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_APP_ORIGIN}/text-file/all`);
-        setFiles(response.data.textFiles.map((file: any) => {file.checked = false; return file;}));
+        setFiles(response.data.textFiles.map((file: any) => ({ ...file, checked: false })));
       } catch (error) {
         console.error('Error fetching files:', error);
       }
@@ -69,6 +70,34 @@ export function FileManager() {
     );
   };
 
+  const handleRenameFile = async (file: TextFile): Promise<void> => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_APP_ORIGIN}/text-file/${file.id}`, {
+        name: newFileName,
+        content: file.content
+      });
+      setFiles((prevFiles) =>
+        prevFiles.map((prev) =>
+          prev.id === file.id ? { ...prev, name: response.data.textFile.name } : prev
+        )
+      );
+      setRenamingFileId(null);
+      setNewFileName('');
+    } catch (error) {
+      console.error('Error renaming file:', error);
+    }
+  };
+
+  const startRenamingFile = (id: number, currentName: string): void => {
+    setRenamingFileId(id);
+    setNewFileName(currentName);
+  };
+
+  const cancelRenaming = (): void => {
+    setRenamingFileId(null);
+    setNewFileName('');
+  };
+
   return (
     <div className="container">
       <h1 className="heading">File Manager</h1>
@@ -104,7 +133,7 @@ export function FileManager() {
           disabled={!selectedFile}
           className="search-button"
         >   
-        Consistency K vs K
+          Consistency K vs K
         </button>
       </div>
       <ul className="file-list">
@@ -119,19 +148,38 @@ export function FileManager() {
               onChange={() => handleChecked(file.id)}
               className="file-item-checkbox"
             />
-            <strong>{file.name}</strong>
+            {renamingFileId === file.id ? (
+              <>
+                <input
+                  type="text"
+                  value={newFileName}
+                  onChange={(e) => setNewFileName(e.target.value)}
+                  className="file-item-input"
+                />
+                <button
+                  onClick={() => handleRenameFile(file)}
+                  className="confirm-button"
+                >
+                  Confirm
+                </button>
+                <button
+                  onClick={cancelRenaming}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <strong onDoubleClick={() => startRenamingFile(file.id, file.name)}>
+                {file.name}
+              </strong>
+            )}
             <div className="file-item-content">
               <p>{file.content.substring(0, 100)}</p>
             </div>
             <button
-              onClick={() => handleDeleteFile(file.id)}
-              className="delete-button"
-            >
-              Detail
-            </button>
-            <button
-              onClick={() => handleDeleteFile(file.id)}
-              className="delete-button"
+              onClick={() => startRenamingFile(file.id, file.name)}
+              className="rename-button"
             >
               Rename
             </button>
