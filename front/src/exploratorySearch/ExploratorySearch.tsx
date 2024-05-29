@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import './ExploratorySearch.css';
@@ -18,7 +18,7 @@ type Result = {
 }
 
 const ExploratorySearch = ({textFileIDs}: { textFileIDs: string[] }) => {
-  const [query, setQuery] = useState<string>('');
+  const [_, setQuery] = useState<string>('');
   const [results, setResults] = useState<{ id: number, text: string }[]>([]);
 
   const handleSearch = async (searchQuery: string) => {
