@@ -191,7 +191,7 @@ export function FileManager({ setScene, setExploratorySearchFileIDs, setCompareQ
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    cancelRenaming
+                    cancelRenaming()
                   }}
                   className="cancel-button"
                 >
