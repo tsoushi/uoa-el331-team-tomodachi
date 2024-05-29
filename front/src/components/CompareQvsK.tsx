@@ -30,7 +30,7 @@ const BoxVertical = styled.div`
 `
 
 const BoxHorizontal = styled.div`
-    margin: 10px;
+    margin: 0px;
     display: flex;
     flex-direction: row;
 `
@@ -46,9 +46,11 @@ const TermBox = styled.div`
     border-radius: 10px;
 `
 
-const Offset = styled.p`
+const Offset = styled.div`
+    margin-top: 20px;
+    font-size: 2em;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
 `
 
 const Word = styled.span`
@@ -60,30 +62,27 @@ const WordCount = styled.span`
     color: #666;
 `
 
-// Termごとに高さを揃える
-// ファイルごとに横並びにする
-
-
 const Term = ({qFileName, kFileNames, qTerm, kTerms}: { qFileName: string, kFileNames: string[], qTerm: ResultTerm, kTerms: ResultTerm[] }) => {
     return (
-        <BoxHorizontal>
-            <BoxItem>
-                <TermBox>
-                    <h3>{qFileName}</h3>
-                    <Offset>RANK: {qTerm.offset}</Offset>
-                    {qTerm.words.map((word) => <p key={word.word}><Word>{word.word}</Word> <WordCount>{word.count}</WordCount></p>)}
-                </TermBox>
-            </BoxItem>
-            {kTerms.map((kTerm, index) => 
-                <BoxItem key={index}>
+        <BoxVertical>
+            <Offset>RANK: {qTerm.offset}</Offset>
+            <BoxHorizontal>
+                <BoxItem>
                     <TermBox>
-                        <h3>{kFileNames[index]}</h3>
-                        <Offset>RANK: {kTerm.offset}</Offset>
-                        {kTerm.words.map((word) => <p key={word.word}><Word>{word.word}</Word> <WordCount>{word.count}</WordCount></p>)}
+                        <h3>{qFileName}</h3>
+                        {qTerm.words.map((word) => <p key={word.word}><Word>{word.word}</Word> <WordCount>{word.count}</WordCount></p>)}
                     </TermBox>
                 </BoxItem>
-            )}
-        </BoxHorizontal>
+                {kTerms.map((kTerm, index) => 
+                    <BoxItem key={index}>
+                        <TermBox>
+                            <h3>{kFileNames[index]}</h3>
+                            {kTerm.words.map((word) => <p key={word.word}><Word>{word.word}</Word> <WordCount>{word.count}</WordCount></p>)}
+                        </TermBox>
+                    </BoxItem>
+                )}
+            </BoxHorizontal>
+        </BoxVertical>
     )
 }
 
@@ -106,7 +105,6 @@ export const CompareQvsK = ({qTextFileID, kTextFileIDs}: { qTextFileID: string, 
                 { result && 
                     <BoxVertical>
                         <BoxItem>
-                            <h2>{result.qTextFileName}</h2>
                             {result.terms.map((term, index) => <Term key={index} qFileName={result.qTextFileName} kFileNames={result.kTextFiles.map((kFile) => kFile.kTextFileName)} qTerm={term} kTerms={result.kTextFiles.map((kFile) => kFile.terms[index])} />)}
                         </BoxItem>
                     </BoxVertical>
