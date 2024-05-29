@@ -22,6 +22,7 @@ export function FileManager({ setScene, setExploratorySearchFileIDs, setCompareQ
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [renamingFileId, setRenamingFileId] = useState<string | null>(null);
   const [newFileName, setNewFileName] = useState<string>('');
+  const [lastSelectedFileId, setLastSelectFileId] = useState<string>('');
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -133,7 +134,8 @@ export function FileManager({ setScene, setExploratorySearchFileIDs, setCompareQ
         </button>
         <button
           onClick={() => {
-            // TODO: Qを選択する画面を表示する
+            setCompareQvsKQFileID(lastSelectedFileId)
+            setCompareQvsKKFileIDs(files.filter((file) => file.checked && file.id !== lastSelectedFileId).map((file) => file.id.toString()))
             setScene('CompareQvsK')
           }}
           className="search-button"
@@ -153,7 +155,12 @@ export function FileManager({ setScene, setExploratorySearchFileIDs, setCompareQ
       <ul className="file-list">
         {files.map((file) => (
           <li
-            onClick={() => handleChecked(file.id)}
+            onClick={() => {
+              if (!file.checked) {
+                setLastSelectFileId(file.id)
+              }
+              handleChecked(file.id)
+            }}
             key={file.id}
             className="file-item"
           >
