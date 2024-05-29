@@ -41,8 +41,8 @@ class CompareQvsKsKTextFile:
 
     def to_dict(self):
         return {
-            'k_text_file_id': self.k_text_file_id,
-            'k_text_file_name': self.k_text_file_name,
+            'kTextFileID': self.k_text_file_id,
+            'kTextFileName': self.k_text_file_name,
             'terms': [term.to_dict() for term in self.terms]
         }
 
@@ -59,10 +59,10 @@ class CompareQvsKsResult:
     def to_dict(self):
         return {
             'id': self.id,
-            'q_text_file_id': self.q_text_file_id,
-            'q_text_file_name': self.q_text_file_name,
+            'qTextFileID': self.q_text_file_id,
+            'qTextFileName': self.q_text_file_name,
             'terms': [term.to_dict() for term in self.terms],
-            'k_text_files': [k_text_file.to_dict() for k_text_file in self.k_text_files]
+            'kTextFiles': [k_text_file.to_dict() for k_text_file in self.k_text_files]
         }
 
 def new_compare_q_vs_ks_result(q_text_file: TextFile) -> CompareQvsKsResult:

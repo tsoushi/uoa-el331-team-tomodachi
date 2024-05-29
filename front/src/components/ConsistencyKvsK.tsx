@@ -21,13 +21,32 @@ export const ConsistencyKvsK = ({textFileIDs}: { textFileIDs: string[] }) => {
             textFileIDs,
             limit: 10000
         }).then((response) => {
-            setResult(response.data)
+            setResult(response.data.result)
         })
     }, [])
     return (
         <div>
             <h1>Consistency K vs K</h1>
-            <div>{ JSON.stringify(result) }</div>
+            <div>
+                { result && 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Word</th>
+                                { result.textFiles.map((textFile) => <th key={textFile.textFileId}>{textFile.textFileName}</th>) } 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { result.words.map((word, index) => 
+                                <tr key={index}>
+                                    <td>{word}</td>
+                                    { result.textFiles.map((textFile, textFileIndex) => <td key={textFile.textFileId}>{textFile.wordCounts[index]}</td>) }
+                                </tr>
+                            ) }
+                        </tbody>
+                    </table>
+                }
+            </div>
         </div>
     )
 }
