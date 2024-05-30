@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { CompareQvsK } from './components/CompareQvsK'
-import { ConsistencyKvsK } from './components/ConsistencyKvsK'
+import { CompareQvsK, Result as CompareResult } from './components/CompareQvsK'
+import { ConsistencyKvsK, Result as ConsistencyResult } from './components/ConsistencyKvsK'
 
 import { FileManager } from './components/FileManager'
 import ExploratorySearch from './exploratorySearch/ExploratorySearch'
+import axios from "axios"
+
+
 
 const MenuBox = styled.ul`
   display: flex;
@@ -50,6 +53,30 @@ function App() {
   const [compareQvsKKFileIDs, setCompareQvsKKFileIDs] = useState<string[]>([])
   const [compareQvsKQFileID, setCompareQvsKQFileID] = useState<string>('')
   const [consistencyKvsKFileIDs, setConsistencyKvsKFileIDs] = useState<string[]>([])
+  const [compareResult, setCompareResult ] = useState<CompareResult | null>(null) // QvsK
+  const [consistencyResult, setConsistencyResult] = useState<ConsistencyResult | null>(null) // KvsK
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_APP_ORIGIN}/compare-q-vs-k`, {
+        qTextFileID: compareQvsKQFileID,
+        kTextFileIDs: compareQvsKKFileIDs,
+    }).then((response) => {
+        setCompareResult(response.data.result)
+    })
+}, [compareQvsKQFileID, compareQvsKKFileIDs])
+
+
+useEffect(() => {
+  axios.post(`${import.meta.env.VITE_APP_ORIGIN}/consistency-k-vs-k`, {
+      textFileIDs: consistencyKvsKFileIDs,
+      limit: 10000
+  }).then((response) => {
+      setConsistencyResult(response.data.result)
+  })
+}, [consistencyKvsKFileIDs])
+
+
+
 
   return (
     <>
@@ -65,8 +92,8 @@ function App() {
             setCompareQvsKKFileIDs={ setCompareQvsKKFileIDs }
             setConsistencyKvsKFileIDs={ setConsistencyKvsKFileIDs } />}
         {scene === 'ExploratorySearch' && <ExploratorySearch textFileIDs={ exploratorySearchFileIDs } />}
-        {scene === 'CompareQvsK' && <CompareQvsK qTextFileID={ compareQvsKQFileID } kTextFileIDs={ compareQvsKKFileIDs } />}
-        {scene === 'ConsistencyKvsK' && <ConsistencyKvsK textFileIDs={ consistencyKvsKFileIDs } />}
+        {scene === 'CompareQvsK' && <CompareQvsK result={compareResult} />}
+        {scene === 'ConsistencyKvsK' && <ConsistencyKvsK result={ consistencyResult } />}
       </div>
     </>
   )
