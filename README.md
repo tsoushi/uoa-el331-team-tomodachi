@@ -19,7 +19,7 @@ npm install
 npm run dev
 ```
 
-### Docker
+### Docker(first time)
 ```sh
 mkdir dbdata
 docker compose up
