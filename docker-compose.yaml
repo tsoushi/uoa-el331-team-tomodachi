@@ -1,0 +1,23 @@
+services:
+  server:
+    build: ./server
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3001
+      - DATABASE_PATH=/dbdata/db.sqlite3
+    command: python main.py
+    ports:
+      - "3001:3001"
+    volumes:
+      - type: bind
+        source: ./dbdata
+        target: /dbdata
+  front:
+    build: ./front
+    environment:
+      - VITE_APP_ORIGIN=http://localhost:3001
+    command: npx vite --host 0.0.0.0 --port 3000 
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server

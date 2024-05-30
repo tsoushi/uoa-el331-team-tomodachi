@@ -40,7 +40,7 @@ export const ConsistencyKvsK = ({textFileIDs}: { textFileIDs: string[] }) => {
                             { result.words.map((word, index) => 
                                 <tr key={index}>
                                     <td>{word}</td>
-                                    { result.textFiles.map((textFile, textFileIndex) => <td key={textFile.textFileId}>{textFile.wordCounts[index]}</td>) }
+                                    { result.textFiles.map((textFile, _) => <td key={textFile.textFileId}>{textFile.wordCounts[index]}</td>) }
                                 </tr>
                             ) }
                         </tbody>
