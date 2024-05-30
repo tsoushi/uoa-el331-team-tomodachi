@@ -102,6 +102,7 @@ export const CompareQvsK = ({qTextFileID, kTextFileIDs}: { qTextFileID: string, 
         <BoxVertical>
             <h1>Compare Q vs K</h1>
             <div>
+                { !result && <p>Loading...</p>}
                 { result && 
                     <BoxVertical>
                         <BoxItem>

@@ -28,6 +28,7 @@ export const ConsistencyKvsK = ({textFileIDs}: { textFileIDs: string[] }) => {
         <div>
             <h1>Consistency K vs K</h1>
             <div>
+                { !result && <p>Loading...</p>}
                 { result && 
                     <table>
                         <thead>
