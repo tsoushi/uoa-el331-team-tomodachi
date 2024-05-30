@@ -19,7 +19,7 @@ type Result = {
 
 const ExploratorySearch = ({textFileIDs}: { textFileIDs: string[] }) => {
   const [_, setQuery] = useState<string>('');
-  const [results, setResults] = useState<{ id: number, text: string }[]>([]);
+  const [results, setResults] = useState<{ id: string, text: string ,leftWords :string,rightWords: string}[]>([]);
 
   const handleSearch = async (searchQuery: string) => {
     setQuery(searchQuery);
@@ -32,7 +32,7 @@ const ExploratorySearch = ({textFileIDs}: { textFileIDs: string[] }) => {
       const result = response.data.result as Result;
       setResults(result.searchTerms.map((searchTerm) => {
         return {
-          id: parseInt(searchTerm.textFileId),
+          id: searchTerm.textFileId,
           text: result.targetWord, // TODO: これは真ん中に表示し、色などを変えて強調する
           leftWords: searchTerm.leftWords.join(' '), // TODO: これがtextの左側に表示されるようにする
           rightWords: searchTerm.rightWords.join(' '), // TODO: これがtextの右側に表示されるようにする

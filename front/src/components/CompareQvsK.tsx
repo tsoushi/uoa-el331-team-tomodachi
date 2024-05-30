@@ -90,6 +90,7 @@ export const CompareQvsK = ({result}: { result: Result | null}) => {
         <BoxVertical>
             <h1>Compare Q vs K</h1>
             <div>
+                { !result && <p>Loading...</p>}
                 { result && 
                     <BoxVertical>
                         <BoxItem>
