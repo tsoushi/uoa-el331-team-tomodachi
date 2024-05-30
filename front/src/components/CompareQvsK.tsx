@@ -1,5 +1,3 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
 import styled from '@emotion/styled'
 
 type ResultTerm = {
@@ -10,7 +8,7 @@ type ResultTerm = {
     }[]
 }
 
-type Result = {
+export type Result = {
     id: string,
     qTextFileID: string,
     qTextFileName: string,
@@ -86,17 +84,7 @@ const Term = ({qFileName, kFileNames, qTerm, kTerms}: { qFileName: string, kFile
     )
 }
 
-export const CompareQvsK = ({qTextFileID, kTextFileIDs}: { qTextFileID: string, kTextFileIDs: string[] }) => {
-    const [result, setResult] = useState<Result | null>(null)
-
-    useEffect(() => {
-        axios.post(`${import.meta.env.VITE_APP_ORIGIN}/compare-q-vs-k`, {
-            qTextFileID,
-            kTextFileIDs
-        }).then((response) => {
-            setResult(response.data.result)
-        })
-    }, [])
+export const CompareQvsK = ({result}: { result: Result | null}) => {
 
     return (
         <BoxVertical>

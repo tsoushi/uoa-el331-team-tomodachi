@@ -1,7 +1,4 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-
-type Result = {
+export type Result = {
     id: string,
     words: string[],
     textFiles: {
@@ -13,17 +10,8 @@ type Result = {
     updatedAt: string
 }
 
-export const ConsistencyKvsK = ({textFileIDs}: { textFileIDs: string[] }) => {
-    const [result, setResult] = useState<Result | null>(null)
+export const ConsistencyKvsK = ({result}: { result:  Result | null}) => {
 
-    useEffect(() => {
-        axios.post(`${import.meta.env.VITE_APP_ORIGIN}/consistency-k-vs-k`, {
-            textFileIDs,
-            limit: 10000
-        }).then((response) => {
-            setResult(response.data.result)
-        })
-    }, [])
     return (
         <div>
             <h1>Consistency K vs K</h1>
