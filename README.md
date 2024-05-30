@@ -24,8 +24,5 @@ npm run dev
 docker compose up
 ```
 
-### For muizu
-. env/bin/activate
-
 ## バックエンドのAPI仕様 API Reference
 [docs/server-api.md](docs/server-api.md) を参照
