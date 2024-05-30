@@ -2,6 +2,7 @@ import os
 import sys
 import flask
 from flask import request, jsonify
+from flask_cors import CORS, cross_origin
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -10,6 +11,9 @@ import usecase
 database.create_table() # データベース初期化
 
 app = flask.Flask(__name__)
+
+# CORS
+CORS(app)
 
 # TODO: 各エンドポイントの引数のエラーハンドリング
 
@@ -99,5 +103,11 @@ def consistency_k_vs_k():
     })
 
 if __name__ == '__main__':
-
-    app.run(host='0.0.0.0', port=8080)
+    import os
+    host = os.getenv('HOST')
+    if host is None:
+        host = '0.0.0.0'
+    port = os.getenv('PORT')
+    if port is None:
+        port = 8080
+    app.run(host=host, port=port)

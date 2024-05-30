@@ -1,10 +1,14 @@
 import sqlite3
 import domain
+import os
 
 from typing import Optional, List
 
 def get_con() -> sqlite3.Connection:
-    return sqlite3.connect('database.db')
+    dbpath = os.getenv('DATABASE_PATH')
+    if dbpath == None:
+        dbpath = 'database.db'
+    return sqlite3.connect(dbpath)
 
 def create_table():
     con = get_con()
