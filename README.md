@@ -21,6 +21,12 @@ npm run dev
 
 ### Docker
 ```sh
+mkdir dbdata
+docker compose up
+```
+#### if you change code
+```sh
+docker compose build
 docker compose up
 ```
 
