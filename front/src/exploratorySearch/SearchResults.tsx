@@ -1,8 +1,11 @@
 import React from 'react';
+import './ExploratorySearch.css';
 
 interface SearchResult {
-  id: number;
+  id: string;
   text: string;
+  leftWords: string;
+  rightWords: string;
 }
 
 interface SearchResultsProps {
@@ -15,7 +18,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
       {results.length > 0 ? (
         <ul>
           {results.map((result) => (
-            <li key={result.id}>{result.text}</li>
+            <li key={result.id}><span>{result.leftWords}</span><span className="yellow_text">{result.text}</span><span>{result.rightWords}</span></li>
           ))}
         </ul>
       ) : (
